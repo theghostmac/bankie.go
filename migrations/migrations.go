@@ -47,3 +47,12 @@ func createAccounts() {
     }
     defer db.Close()
 }
+
+func Migrate() {
+    db := connectDB()
+    db.AutoMigrate(&User{}, &Account{})
+    defer db.Close()
+    
+    createAccounts()
+}
+
