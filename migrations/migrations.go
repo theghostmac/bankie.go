@@ -24,6 +24,6 @@ type Account struct {
 func connectDB() *gorm.DB {
     db, err := gorm.Open("postgres", "host=127.0.0.1 port=5432 user=user dbname=BankiePostgresApp password=b4nk1eg0 sslmode=disable")
     helpers.HandleErr(err)
-    return db
+    return db 
 }
 
