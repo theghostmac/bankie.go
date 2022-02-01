@@ -27,3 +27,23 @@ func connectDB() *gorm.DB {
     return db 
 }
 
+func createAccounts() {
+    db := connectDB()
+
+    users := [4]User{
+        {Username: "MacBobby", Email: "macbobbychibuzor@gmail.com"},
+        {Username: "GhostMac", Email: "theghostmac@gmail.com"},
+        {Username: "Chibuzor", Email: "peekube01@gmail.com"},
+        {Username: "Anna", Email: "alpha.maxrdj@gmail.com"},
+    }
+
+    for i := 0; i < len(users); i++ {
+        generatedPassword := helpers.HashAndSalt([]byte(users[i].Username))
+        user := User{Username: users[i].Username, Email: users[i].Email, Password: generatedPassword}
+        db.Create(&user)
+
+        account := Account{Type: "Daily Account", Name: string(users[i].Username + "'s" + " account"), Balance: uint(10000 * int(i+1)), UserID: user.ID}
+        db.Create(&account)
+    }
+    defer db.Close()
+}
