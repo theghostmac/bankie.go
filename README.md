@@ -6,3 +6,5 @@ This project makes use of PostgreSQL and GORM plugins.
 
 Run:
 go run main.go
+
+Building the user Authentication session on day two
