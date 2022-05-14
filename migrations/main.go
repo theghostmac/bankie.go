@@ -1,8 +1,8 @@
 package main
 
-import {
+import (
 	"github.com/theghostmac/bankie.go/migrations"
-}
+)
 
 func main() {
 	migrations.Migrate()
