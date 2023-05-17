@@ -1,4 +1,4 @@
-module bankie.go
+module github.com/theghostmac/bankie.go
 
 go 1.19
 

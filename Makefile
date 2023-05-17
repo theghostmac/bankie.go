@@ -1,9 +1,11 @@
 build:
-	go build -o bin/bankie.go
+	go build -o bankie cmd/app/main.go
 
 run:
-	build
-	./bin/bankie.go
+	go run cmd/app/main.go
 
 test:
 	go test -v ./...
+
+clean:
+	rm -f bankie
