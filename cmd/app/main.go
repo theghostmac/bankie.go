@@ -2,13 +2,12 @@ package main
 
 import (
 	"github.com/theghostmac/bankie.go/api/rest"
-
-	"log"
+	"github.com/theghostmac/bankie.go/common/logger"
 )
 
 func main() {
 	serverEngine := rest.NewAPIServer(":8082")
 	serverEngine.StartServer()
-
-	log.Println("Hello Banker, API Server is running successfully...")
+	logger.InfoLogs("Server has started up...\n")
+	logger.ErrorLogs("Hello Banker, API Server is running successfully...\n")
 }

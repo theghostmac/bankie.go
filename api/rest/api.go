@@ -3,6 +3,7 @@ package rest
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/theghostmac/bankie.go/common/logger"
 	"log"
 	"net/http"
 
@@ -19,9 +20,12 @@ type APIFunc func(http.ResponseWriter, *http.Request) error
 
 // HTTPHandleFunc decorates the APIFunc into an HTTP handler.
 func HTTPHandleFunc(f APIFunc) http.HandlerFunc {
-	return func(writer http.ResponseWriter, request *http.Request) {
-		if err := f(writer, request); err != nil {
-			WriteJSON(writer, http.StatusBadRequest, APIError{Error: err.Error()})
+	return func(writer http.ResponseWriter, reader *http.Request) {
+		if err := f(writer, reader); err != nil {
+			err := WriteJSON(writer, http.StatusBadRequest, APIError{Error: err.Error()})
+			if err != nil {
+				log.Fatal("Serving HTTP error failed...")
+			}
 		}
 	}
 }
@@ -83,6 +87,7 @@ func (as *APIServer) Transfer(writer http.ResponseWriter, reader *http.Request) 
 func (as *APIServer) StartServer() {
 	server := mux.NewRouter()
 	server.HandleFunc("/accounts", HTTPHandleFunc(as.HandleAccounts))
-	log.Println("JSON API server running on port:", as.listenToPort)
+	//log.Println("JSON API server running on port:", as.listenToPort)
+	logger.InfoLogs("JSON API server running on specified port...\n")
 	http.ListenAndServe(as.listenToPort, server)
 }
