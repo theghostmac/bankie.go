@@ -1,0 +1,9 @@
+read -p "Enter the commit message 🚀: " message
+
+git add .
+
+git commit -am "$message"
+
+git push
+
+say "Pushing to GitHub completed"

@@ -1,11 +1,30 @@
+.PHONY: all build run test clean
+
+BINARY_NAME := bankie
+DOCKER_IMAGE_NAME := bankie
+
+all: build
+
 build:
-	go build -o bankie cmd/app/main.go
+	@echo "Building binary..."
+	@go build -o $(BINARY_NAME) ./cmd/app
 
 run:
-	go run cmd/app/main.go
+	@echo "Running the application..."
+	@go run ./cmd/app
 
 test:
 	go test -v ./...
 
 clean:
-	rm -f bankie
+	@echo "Cleaning up..."
+	@rm -f $(BINARY_NAME)
+
+docker-build:
+	@echo "Building Docker image..."
+	@docker build -t $(DOCKER_IMAGE_NAME) .
+
+docker-run:
+	@echo "Running Docker container..."
+	@docker run --rm $(DOCKER_IMAGE_NAME)
+
