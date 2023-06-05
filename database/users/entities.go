@@ -1,4 +1,4 @@
-package main
+package users
 
 import (
 	"context"
@@ -6,7 +6,9 @@ import (
 
 type AName string
 
-type AccountBalance string
+type Money string
+
+type BankID int64
 
 // TypeOfUser uses number to tell the type of user incoming to bankie.
 type TypeOfUser = int
@@ -39,14 +41,15 @@ type LeadAccount struct {
 
 type CustomerAccount struct {
 	LeadAccount
-	BankNumber int64
-	Balance    AccountBalance
+	BankNumber BankID
+	Balance    Money
 }
 
 type NewAccountCreator struct {
 }
 
-// TODO implement these:
+// TODO implement these as ubiquitous language for this project:
+// - everything below this line.
 
 // LeadRequest requests for email from a user to become a Lead. See domain file for definition of Lead.
 type LeadRequest struct {
