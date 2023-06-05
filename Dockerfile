@@ -1,5 +1,5 @@
 # Start from a Golang base image
-FROM golang:latest
+FROM golang:1.20.4-alpine3.18 AS builder
 
 # Set the working directory inside the container
 WORKDIR /app
@@ -14,7 +14,15 @@ RUN go mod download
 COPY . .
 
 # Build Bankie
-RUN go build -o bankie cmd/app/main.go
+RUN go build -o bankie cmd/app/
+
+# Use a lightweight Alpine base image
+FROM alpine:latest
+
+# Set the workdir instide the container
+
+# Expose the port the application will listen to. Close after configuring config.InitiateConfig().
+EXPOSE 8082
 
 # Set the entrypoint to run Bankie
 ENTRYPOINT ["./bankie"]
