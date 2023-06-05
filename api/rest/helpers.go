@@ -1,13 +1,15 @@
 package rest
 
 import (
+	"github.com/theghostmac/bankie.go/database/users"
 	"log"
 	"net/http"
 )
 
 // APIServer creates a port for the endpoint.
 type APIServer struct {
-	listenToPort string
+	ListenToPort string
+	Store        users.Storage
 }
 
 // APIFunc is a one-off definition of the HTTP handler declaration for each function.

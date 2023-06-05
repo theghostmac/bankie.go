@@ -12,15 +12,16 @@ import (
 
 // WriteJSON writes JSON response to the http.ResponseWriter.
 func WriteJSON(writer http.ResponseWriter, status int, value interface{}) error {
+	writer.Header().Add("Content-Type", "application/json")
 	writer.WriteHeader(status)
-	writer.Header().Set("Content-Type", "application/json")
 	return json.NewEncoder(writer).Encode(value)
 }
 
 // NewAPIServer creates a new APIServer instance listening on the provided port.
-func NewAPIServer(listenToPort string) *APIServer {
+func NewAPIServer(ListenToPort string, Store users.Storage) *APIServer {
 	return &APIServer{
-		listenToPort: listenToPort,
+		ListenToPort: ListenToPort,
+		Store:        Store,
 	}
 }
 
@@ -68,5 +69,5 @@ func (as *APIServer) StartServer() {
 	server.HandleFunc("/accounts/{id}", HTTPHandleFunc(as.GetAccount))
 	//log.Println("JSON API server running on port:", as.listenToPort)
 	logger.InfoLogs("JSON API server running on specified port...\n")
-	http.ListenAndServe(as.listenToPort, server)
+	http.ListenAndServe(as.ListenToPort, server)
 }
