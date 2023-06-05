@@ -4,11 +4,12 @@ import (
 	"context"
 )
 
-type AName string
-
-type Money string
-
-type BankID int64
+// custom types.
+type (
+	AName  string
+	Money  string
+	BankID int64
+)
 
 // TypeOfUser uses number to tell the type of user incoming to bankie.
 type TypeOfUser = int
@@ -34,15 +35,15 @@ type UserAddRequest struct {
 }
 
 type LeadAccount struct {
-	Email     string
-	FirstName AName
-	LastName  AName
+	Email     string `json:"id"`
+	FirstName AName  `json:"firstName"`
+	LastName  AName  `json:"lastName"`
 }
 
 type CustomerAccount struct {
 	LeadAccount
-	BankNumber BankID
-	Balance    Money
+	BankNumber BankID `json:"bankNumber"`
+	Balance    Money  `json:"balance"`
 }
 
 type NewAccountCreator struct {

@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/theghostmac/bankie.go/common/logger"
+	"github.com/theghostmac/bankie.go/database/users"
 	"log"
 	"net/http"
 
@@ -65,7 +66,10 @@ func (as *APIServer) HandleAccounts(writer http.ResponseWriter, reader *http.Req
 
 // GetAccount handles GET requests for retrieving account information.
 func (as *APIServer) GetAccount(writer http.ResponseWriter, reader *http.Request) error {
-	return nil
+	//idVariables := mux.Vars(reader)["id"]
+	//account := users.NewCustomer("MacBobby", "User", "uzormacbobby@gmail.com")
+	pointerToEmptyAccount := &users.CustomerAccount{}
+	return WriteJSON(writer, http.StatusOK, pointerToEmptyAccount)
 }
 
 // CreateAccount handles POST requests for creating new accounts.
@@ -87,6 +91,7 @@ func (as *APIServer) Transfer(writer http.ResponseWriter, reader *http.Request) 
 func (as *APIServer) StartServer() {
 	server := mux.NewRouter()
 	server.HandleFunc("/accounts", HTTPHandleFunc(as.HandleAccounts))
+	server.HandleFunc("/accounts/{id}", HTTPHandleFunc(as.GetAccount))
 	//log.Println("JSON API server running on port:", as.listenToPort)
 	logger.InfoLogs("JSON API server running on specified port...\n")
 	http.ListenAndServe(as.listenToPort, server)

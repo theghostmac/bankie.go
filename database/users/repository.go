@@ -11,7 +11,6 @@ func NewCustomer(firstName, lastName AName, email string) *CustomerAccount {
 			LastName:  lastName,
 		},
 		BankNumber: BankID(int64(rand.Intn(1000))),
-		// FIXME:   ^ this conversion is redundant.
-		Balance: Money("$0000"),
+		Balance:    Money("$300,000,000"),
 	}
 }
