@@ -31,3 +31,23 @@ func NewUserRepository() (*UserRepository, error) {
 		db: db,
 	}, nil
 }
+
+func (us *UserRepository) CreateAccount(account *CustomerAccount) error {
+	return nil
+}
+
+func (us *UserRepository) GetAccountByID(id int) error {
+	return nil
+}
+
+func (us *UserRepository) GetAccountByEmail(email string) error {
+	return nil
+}
+
+func (us *UserRepository) UpdateAccount(account *CustomerAccount) error {
+	return nil
+}
+
+func (us *UserRepository) DeleteAccount(id int) error {
+	return nil
+}
