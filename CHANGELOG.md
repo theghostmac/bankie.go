@@ -7,3 +7,4 @@
 
 ## [App functionalities to add]
 1. User ID details.
+2. Wallet service.

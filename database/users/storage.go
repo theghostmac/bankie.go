@@ -17,7 +17,7 @@ type UserRepository struct {
 }
 
 func NewUserRepository() (*UserRepository, error) {
-	connStr := "user=bankiestore dbname=postgres password=ph03n1x sslmode=verify-full"
+	connStr := "user=bankiestore dbname=postgres password=ph03n1x sslmode=disable"
 	db, err := sql.Open("postgres", connStr)
 	if err != nil {
 		return nil, err
