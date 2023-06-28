@@ -16,6 +16,10 @@ func main() {
 		log.Fatal(err)
 	}
 
+	if err := store.Init(); err != nil {
+		log.Fatal(err)
+	}
+
 	serverEngine := rest.NewAPIServer(":8082", store)
 	serverEngine.StartServer()
 	logger.InfoLogs("Server has started up...\n")

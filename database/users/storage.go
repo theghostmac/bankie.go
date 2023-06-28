@@ -32,19 +32,36 @@ func NewUserRepository() (*UserRepository, error) {
 	}, nil
 }
 
-func (us *UserRepository) CreateAccount(account *CustomerAccount) error {
+func (us *UserRepository) Init() error {
+	return us.createAccountTable()
+}
+
+func (us *UserRepository) createAccountTable() error {
+	query := `Create table account if it doesn't exists (
+		id serial primary_key,
+		first_name varchar(50),
+		last_name varchar(50),
+		number serial,
+		balance,
+		created_at timestamp
+		)`
+	_, err := us.db.Exec(query)
+	return err
+}
+
+func (us *UserRepository) CreateAccount(*CustomerAccount) error {
 	return nil
 }
 
-func (us *UserRepository) GetAccountByID(id int) error {
+func (us *UserRepository) GetAccountByID(id int) *CustomerAccount {
 	return nil
 }
 
-func (us *UserRepository) GetAccountByEmail(email string) error {
+func (us *UserRepository) GetAccountByEmail(email string) *CustomerAccount {
 	return nil
 }
 
-func (us *UserRepository) UpdateAccount(account *CustomerAccount) error {
+func (us *UserRepository) UpdateAccount(*CustomerAccount) error {
 	return nil
 }
 
