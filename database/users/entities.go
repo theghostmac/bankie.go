@@ -36,7 +36,7 @@ type UserAddRequest struct {
 }
 
 type LeadAccount struct {
-	Email     string `json:"id"`
+	Email     string `json:"email"`
 	FirstName AName  `json:"firstName"`
 	LastName  AName  `json:"lastName"`
 }

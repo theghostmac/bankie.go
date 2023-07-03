@@ -2,6 +2,7 @@ package users
 
 import (
 	"database/sql"
+	"fmt"
 
 	_ "github.com/lib/pq"
 )
@@ -19,7 +20,7 @@ type UserRepository struct {
 }
 
 func NewUserRepository() (*UserRepository, error) {
-	connStr := "user=bankiestore dbname=postgres password=ph03n1x sslmode=disable"
+	connStr := "host=localhost port=5432 user=postgres dbname=bankiestore password=ph03n1x sslmode=disable"
 	db, err := sql.Open("postgres", connStr)
 	if err != nil {
 		return nil, err
@@ -51,8 +52,27 @@ func (us *UserRepository) createAccountTable() error {
 	return err
 }
 
-func (us *UserRepository) CreateAccount(*CustomerAccount) error {
-	response, err := us.db.Query("insert into account values ()")
+func (us *UserRepository) CreateAccount(ca *CustomerAccount) error {
+	query := `insert into account (
+           first_name, last_name, email, bank_number, balance, created_at                 
+	)
+	values ($1, $2, $3, $4, $5, $6)
+    `
+
+	response, err := us.db.Query(
+		query,
+		ca.FirstName,
+		ca.LastName,
+		ca.BankNumber,
+		ca.Balance,
+		ca.CreatedAt,
+	)
+
+	if err != nil {
+		return err
+	}
+	fmt.Printf("%+v\n", response)
+
 	return nil
 }
 
