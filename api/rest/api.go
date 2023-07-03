@@ -49,7 +49,17 @@ func (as *APIServer) GetAccount(writer http.ResponseWriter, reader *http.Request
 
 // CreateAccount handles POST requests for creating new accounts.
 func (as *APIServer) CreateAccount(writer http.ResponseWriter, reader *http.Request) error {
-	return nil
+	createAccountRequest := new(users.CreateCustomerRequest)
+	if err := json.NewDecoder(reader.Body).Decode(createAccountRequest); err != nil {
+		return err
+	}
+	account := users.NewCustomer(
+		createAccountRequest.FirstName, createAccountRequest.LastName, createAccountRequest.Email,
+	)
+	if err := as.Store.CreateAccount(account); err != nil {
+		return err
+	}
+	return WriteJSON(writer, http.StatusOK, createAccountRequest)
 }
 
 // DeleteAccount handles DELETE requests for deleting existing accounts.

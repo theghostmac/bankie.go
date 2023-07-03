@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"github.com/theghostmac/bankie.go/common/logger"
 	"github.com/theghostmac/bankie.go/database/users"
+
+	_ "github.com/lib/pq"
 )
 
 func DbConn() {

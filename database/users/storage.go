@@ -2,6 +2,8 @@ package users
 
 import (
 	"database/sql"
+
+	_ "github.com/lib/pq"
 )
 
 type Storage interface {
@@ -37,19 +39,20 @@ func (us *UserRepository) Init() error {
 }
 
 func (us *UserRepository) createAccountTable() error {
-	query := `Create table account if it doesn't exists (
-		id serial primary_key,
-		first_name varchar(50),
-		last_name varchar(50),
-		number serial,
-		balance,
-		created_at timestamp
-		)`
+	query := `CREATE TABLE IF NOT EXISTS account (
+		id SERIAL PRIMARY KEY,
+		first_name VARCHAR(50),
+		last_name VARCHAR(50),
+		number SERIAL,
+		balance NUMERIC,
+		created_at TIMESTAMP
+	)`
 	_, err := us.db.Exec(query)
 	return err
 }
 
 func (us *UserRepository) CreateAccount(*CustomerAccount) error {
+	response, err := us.db.Query("insert into account values ()")
 	return nil
 }
 

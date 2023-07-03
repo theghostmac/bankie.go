@@ -2,6 +2,7 @@ package users
 
 import (
 	"context"
+	"time"
 )
 
 // custom types.
@@ -42,15 +43,16 @@ type LeadAccount struct {
 
 type CustomerAccount struct {
 	LeadAccount
-	BankNumber BankID `json:"bankNumber"`
-	Balance    Money  `json:"balance"`
+	BankNumber BankID    `json:"bankNumber"`
+	Balance    Money     `json:"balance"`
+	CreatedAt  time.Time `json:"createdAt"`
 }
 
 type NewAccountCreator struct {
 }
 
 // TODO implement these as ubiquitous language for this project:
-// - everything below this line.
+//  - everything below this line.
 
 // LeadRequest requests for email from a user to become a Lead. See domain file for definition of Lead.
 type LeadRequest struct {
