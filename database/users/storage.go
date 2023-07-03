@@ -88,14 +88,7 @@ func (us *UserRepository) GetAccounts() ([]*CustomerAccount, error) {
 	accounts := []*CustomerAccount{}
 
 	for rows.Next() {
-		account := new(CustomerAccount)
-		err := rows.Scan(
-			&account.FirstName,
-			&account.LastName,
-			&account.BankNumber,
-			&account.Balance,
-			&account.CreatedAt,
-		)
+		account, err := ScanIntoAccount(rows)
 		if err != nil {
 			return nil, err
 		}
@@ -104,8 +97,15 @@ func (us *UserRepository) GetAccounts() ([]*CustomerAccount, error) {
 	return accounts, nil
 }
 
-func (us *UserRepository) GetAccountByID(id int) (Account *CustomerAccount) {
-	return nil
+func (us *UserRepository) GetAccountByID(id int) (Account *CustomerAccount, err error) {
+	rows, err := us.db.Query("SELECT * FROM account where id = $1", id)
+	if err != nil {
+		return nil, err
+	}
+	for rows.Next() {
+		return ScanIntoAccount(rows)
+	}
+	return nil, fmt.Errorf("account %d not found", id)
 }
 
 func (us *UserRepository) GetAccountByEmail(email string) *CustomerAccount {
