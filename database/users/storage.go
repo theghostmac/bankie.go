@@ -12,6 +12,7 @@ type Storage interface {
 	DeleteAccount(int) error
 	UpdateAccount(Account *CustomerAccount) error
 	GetAccountByID(int) (Account *CustomerAccount)
+	GetAccounts() ([]*CustomerAccount, error)
 	GetAccountByEmail(string) (Account *CustomerAccount)
 }
 
@@ -44,7 +45,8 @@ func (us *UserRepository) createAccountTable() error {
 		id SERIAL PRIMARY KEY,
 		first_name VARCHAR(50),
 		last_name VARCHAR(50),
-		number SERIAL,
+    	email VARCHAR(50),
+		bank_number SERIAL,
 		balance NUMERIC,
 		created_at TIMESTAMP
 	)`
@@ -64,6 +66,7 @@ func (us *UserRepository) CreateAccount(ca *CustomerAccount) error {
 		ca.FirstName,
 		ca.LastName,
 		ca.BankNumber,
+		ca.Email,
 		ca.Balance,
 		ca.CreatedAt,
 	)
@@ -76,8 +79,34 @@ func (us *UserRepository) CreateAccount(ca *CustomerAccount) error {
 	return nil
 }
 
-func (us *UserRepository) GetAccountByID(id int) *CustomerAccount {
-	return nil
+func (us *UserRepository) GetAccounts() ([]*CustomerAccount, error) {
+	return nil, nil
+	rows, err := us.db.Query("SELECT * FROM account")
+	if err != nil {
+		return nil, err
+	}
+
+	accounts := []*CustomerAccount{}
+
+	for rows.Next() {
+		account := new(CustomerAccount)
+		err := rows.Scan(
+			&account.FirstName,
+			&account.LastName,
+			&account.BankNumber,
+			&account.Balance,
+			&account.CreatedAt,
+		)
+		if err != nil {
+			return nil, err
+		}
+		accounts = append(accounts, account)
+	}
+	return accounts, nil
+}
+
+func (us *UserRepository) GetAccountByID(id int) (*CustomerAccount, error) {
+	return nil, nil
 }
 
 func (us *UserRepository) GetAccountByEmail(email string) *CustomerAccount {
