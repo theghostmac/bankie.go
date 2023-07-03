@@ -28,7 +28,7 @@ func NewAPIServer(ListenToPort string, Store users.Storage) *APIServer {
 // HandleAccounts handles requests for creating, modifying, and deleting accounts.
 func (as *APIServer) HandleAccounts(writer http.ResponseWriter, reader *http.Request) error {
 	if reader.Method == "GET" {
-		return as.GetAccount(writer, reader)
+		return as.GetAccountByID(writer, reader)
 	}
 	if reader.Method == "POST" {
 		return as.CreateAccount(writer, reader)
@@ -39,12 +39,22 @@ func (as *APIServer) HandleAccounts(writer http.ResponseWriter, reader *http.Req
 	return fmt.Errorf("method not available: %s", reader.Method)
 }
 
-// GetAccount handles GET requests for retrieving account information.
+// GetAccount gets all accounts.
 func (as *APIServer) GetAccount(writer http.ResponseWriter, reader *http.Request) error {
-	//idVariables := mux.Vars(reader)["id"]
+	accounts, err := as.Store.GetAccounts()
+	if err != nil {
+		return err
+	}
+	return WriteJSON(writer, http.StatusOK, accounts)
+}
+
+// GetAccountByID handles GET requests for retrieving account information with ID.
+func (as *APIServer) GetAccountByID(writer http.ResponseWriter, reader *http.Request) error {
+	idVariables := mux.Vars(reader)["id"]
 	//account := users.NewCustomer("MacBobby", "User", "uzormacbobby@gmail.com")
-	pointerToEmptyAccount := &users.CustomerAccount{}
-	return WriteJSON(writer, http.StatusOK, pointerToEmptyAccount)
+	//pointerToEmptyAccount := &users.CustomerAccount{}
+	fmt.Println(idVariables)
+	return WriteJSON(writer, http.StatusOK, &users.CustomerAccount{})
 }
 
 // CreateAccount handles POST requests for creating new accounts.
@@ -76,7 +86,7 @@ func (as *APIServer) Transfer(writer http.ResponseWriter, reader *http.Request) 
 func (as *APIServer) StartServer() {
 	server := mux.NewRouter()
 	server.HandleFunc("/accounts", HTTPHandleFunc(as.HandleAccounts))
-	server.HandleFunc("/accounts/{id}", HTTPHandleFunc(as.GetAccount))
+	server.HandleFunc("/accounts/{id}", HTTPHandleFunc(as.GetAccountByID))
 	//log.Println("JSON API server running on port:", as.listenToPort)
 	logger.InfoLogs("JSON API server running on specified port...\n")
 	http.ListenAndServe(as.ListenToPort, server)

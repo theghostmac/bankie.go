@@ -80,7 +80,6 @@ func (us *UserRepository) CreateAccount(ca *CustomerAccount) error {
 }
 
 func (us *UserRepository) GetAccounts() ([]*CustomerAccount, error) {
-	return nil, nil
 	rows, err := us.db.Query("SELECT * FROM account")
 	if err != nil {
 		return nil, err
@@ -105,8 +104,8 @@ func (us *UserRepository) GetAccounts() ([]*CustomerAccount, error) {
 	return accounts, nil
 }
 
-func (us *UserRepository) GetAccountByID(id int) (*CustomerAccount, error) {
-	return nil, nil
+func (us *UserRepository) GetAccountByID(id int) (Account *CustomerAccount) {
+	return nil
 }
 
 func (us *UserRepository) GetAccountByEmail(email string) *CustomerAccount {
