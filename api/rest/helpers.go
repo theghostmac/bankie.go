@@ -29,5 +29,5 @@ func HTTPHandleFunc(f APIFunc) http.HandlerFunc {
 
 // APIError handles error messages for all API methods.
 type APIError struct {
-	Error string
+	Error string `json:"error"`
 }

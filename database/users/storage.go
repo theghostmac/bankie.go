@@ -11,28 +11,28 @@ type Storage interface {
 	CreateAccount(Account *CustomerAccount) error
 	DeleteAccount(int) error
 	UpdateAccount(Account *CustomerAccount) error
-	GetAccountByID(int) (Account *CustomerAccount)
+	GetAccountByID(int) (Account *CustomerAccount, err error)
 	GetAccounts() ([]*CustomerAccount, error)
 	GetAccountByEmail(string) (Account *CustomerAccount)
 }
 
 type UserRepository struct {
-	db *sql.DB
+	DB *sql.DB
 }
 
 func NewUserRepository() (*UserRepository, error) {
 	connStr := "host=localhost port=5432 user=postgres dbname=bankiestore password=ph03n1x sslmode=disable"
-	db, err := sql.Open("postgres", connStr)
+	DB, err := sql.Open("postgres", connStr)
 	if err != nil {
 		return nil, err
 	}
 
-	if err := db.Ping(); err != nil {
+	if err := DB.Ping(); err != nil {
 		return nil, err
 	}
 
 	return &UserRepository{
-		db: db,
+		DB: DB,
 	}, nil
 }
 
@@ -46,11 +46,11 @@ func (us *UserRepository) createAccountTable() error {
 		first_name VARCHAR(50),
 		last_name VARCHAR(50),
     	email VARCHAR(50),
-		bank_number SERIAL,
+		bank_number VARCHAR(50),
 		balance NUMERIC,
 		created_at TIMESTAMP
 	)`
-	_, err := us.db.Exec(query)
+	_, err := us.DB.Exec(query)
 	return err
 }
 
@@ -61,7 +61,7 @@ func (us *UserRepository) CreateAccount(ca *CustomerAccount) error {
 	values ($1, $2, $3, $4, $5, $6)
     `
 
-	response, err := us.db.Query(
+	response, err := us.DB.Query(
 		query,
 		ca.FirstName,
 		ca.LastName,
@@ -80,7 +80,7 @@ func (us *UserRepository) CreateAccount(ca *CustomerAccount) error {
 }
 
 func (us *UserRepository) GetAccounts() ([]*CustomerAccount, error) {
-	rows, err := us.db.Query("SELECT * FROM account")
+	rows, err := us.DB.Query("SELECT * FROM account")
 	if err != nil {
 		return nil, err
 	}
@@ -97,8 +97,8 @@ func (us *UserRepository) GetAccounts() ([]*CustomerAccount, error) {
 	return accounts, nil
 }
 
-func (us *UserRepository) GetAccountByID(id int) (Account *CustomerAccount, err error) {
-	rows, err := us.db.Query("SELECT * FROM account where id = $1", id)
+func (us *UserRepository) GetAccountByID(id int) (*CustomerAccount, error) {
+	rows, err := us.DB.Query("SELECT * FROM account where id = $1", id)
 	if err != nil {
 		return nil, err
 	}
@@ -117,5 +117,6 @@ func (us *UserRepository) UpdateAccount(*CustomerAccount) error {
 }
 
 func (us *UserRepository) DeleteAccount(id int) error {
-	return nil
+	_, err := us.DB.Query("DELETE FROM account WHERE id = $1")
+	return err
 }

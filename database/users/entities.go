@@ -8,7 +8,7 @@ import (
 // custom types.
 type (
 	AName  string
-	Money  string
+	Money  float64
 	BankID int64
 )
 
@@ -37,18 +37,21 @@ type UserAddRequest struct {
 
 type LeadAccount struct {
 	Email     string `json:"email"`
-	FirstName AName  `json:"firstName"`
-	LastName  AName  `json:"lastName"`
+	FirstName AName  `json:"first_name"`
+	LastName  AName  `json:"last_name"`
 }
 
 type CustomerAccount struct {
 	LeadAccount
-	BankNumber BankID    `json:"bankNumber"`
+	ID         int       `json:"id"`
+	BankNumber BankID    `json:"bank_number"`
 	Balance    Money     `json:"balance"`
-	CreatedAt  time.Time `json:"createdAt"`
+	CreatedAt  time.Time `json:"created_at"`
 }
 
-type NewAccountCreator struct {
+type TransferRequest struct {
+	ToCustomerAccount int `json:"to_account"`
+	Amount            int `json:"amount"`
 }
 
 // TODO implement these as ubiquitous language for this project:
