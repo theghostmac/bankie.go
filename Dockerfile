@@ -25,4 +25,4 @@ FROM alpine:latest
 EXPOSE 8082
 
 # Set the entrypoint to run Bankie
-ENTRYPOINT ["./bankie"]
+ENTRYPOINT ["/bankie"]
