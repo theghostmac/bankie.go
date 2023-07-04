@@ -25,7 +25,12 @@ To run Bankie.go using the Makefile, make sure you have Go and Make installed on
    ```shell
    cd bankie.go
    ```
-3. Build and run the application using the Makefile:
+3. Start the PostgreSQL repository by running the Docker installation below, in another terminal.
+   To start bankie any time, run:
+   ```shell
+   docker start bankie
+   ```
+4. Build and run the application using the Makefile:
    ```shell
    make run
    ```
@@ -74,7 +79,7 @@ To run Bankie.go by cloning the repository, make sure you have Go installed on y
 
 ## Usage
 
-Once the application is running, you can interact with it using a RESTful API. The following endpoints are available:
+Once the application is running, you can interact with it using a RESTFul API. The following endpoints are available:
 
 - **POST /accounts**: Create a new bank account. Provide the account holder's name and an initial deposit amount.
 - **GET /accounts/:id**: Retrieve information about a specific account.
