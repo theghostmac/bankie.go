@@ -7,8 +7,8 @@ import (
 
 // custom types.
 type (
-	AName  string
-	Money  float64
+	AName string
+	//Money  float64
 	BankID int64
 )
 
@@ -45,7 +45,7 @@ type CustomerAccount struct {
 	LeadAccount
 	ID         int       `json:"id"`
 	BankNumber BankID    `json:"bank_number"`
-	Balance    Money     `json:"balance"`
+	Balance    float64   `json:"balance"`
 	CreatedAt  time.Time `json:"created_at"`
 }
 
