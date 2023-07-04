@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/gorilla/mux"
-	"github.com/theghostmac/bankie.go/application/authentication"
 	"github.com/theghostmac/bankie.go/common/logger"
 	"github.com/theghostmac/bankie.go/database/users"
 	"net/http"
@@ -119,7 +118,7 @@ func (as *APIServer) Transfer(writer http.ResponseWriter, reader *http.Request) 
 func (as *APIServer) StartServer() {
 	server := mux.NewRouter()
 	server.HandleFunc("/accounts", HTTPHandleFunc(as.HandleAccounts))
-	server.HandleFunc("/accounts/{id}", authentication.WithJWTAuth(HTTPHandleFunc(as.GetAccountByID)))
+	server.HandleFunc("/accounts/{id}", WithJWTAuth(HTTPHandleFunc(as.GetAccountByID)))
 
 	server.HandleFunc("/transfer/", HTTPHandleFunc(as.Transfer))
 	//log.Println("JSON API server running on port:", as.listenToPort)

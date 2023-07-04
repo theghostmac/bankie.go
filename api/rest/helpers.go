@@ -1,6 +1,8 @@
 package rest
 
 import (
+	"fmt"
+	"github.com/theghostmac/bankie.go/application/authentication"
 	"github.com/theghostmac/bankie.go/database/users"
 	"log"
 	"net/http"
@@ -30,4 +32,17 @@ func HTTPHandleFunc(f APIFunc) http.HandlerFunc {
 // APIError handles error messages for all API methods.
 type APIError struct {
 	Error string `json:"error"`
+}
+
+// WithJWTAuth is a middleware function that provides JWT authentication for HTTP handlers.
+func WithJWTAuth(authHandlerFunc http.HandlerFunc) http.HandlerFunc {
+	return func(writer http.ResponseWriter, request *http.Request) {
+		fmt.Println("Calling JWT Auth Middleware...")
+		tokenString := request.Header.Get("x-jwt-token")
+		_, err := authentication.ValidateJWT(tokenString)
+		if err != nil {
+			WriteJSON(writer, http.StatusForbidden, APIError{Error: "Invalid Token"})
+		}
+		authHandlerFunc(writer, request)
+	}
 }
