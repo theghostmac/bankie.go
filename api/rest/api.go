@@ -117,6 +117,7 @@ func (as *APIServer) Transfer(writer http.ResponseWriter, reader *http.Request) 
 // StartServer starts the API server.
 func (as *APIServer) StartServer() {
 	server := mux.NewRouter()
+	server.HandleFunc("/", HTTPHandleFunc(nil))
 	server.HandleFunc("/accounts", HTTPHandleFunc(as.HandleAccounts))
 	server.HandleFunc("/accounts/{id}", WithJWTAuth(HTTPHandleFunc(as.GetAccountByID)))
 
