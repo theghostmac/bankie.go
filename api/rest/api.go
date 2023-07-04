@@ -26,21 +26,21 @@ func NewAPIServer(ListenToPort string, Store users.Storage) *APIServer {
 }
 
 // HandleAccounts handles requests for creating, modifying, and deleting accounts.
-func (as *APIServer) HandleAccounts(writer http.ResponseWriter, reader *http.Request) error {
-	if reader.Method == "GET" {
-		return as.GetAccountByID(writer, reader)
+func (as *APIServer) HandleAccounts(writer http.ResponseWriter, request *http.Request) error {
+	if request.Method == "GET" {
+		return as.GetAccountByID(writer, request)
 	}
-	if reader.Method == "POST" {
-		return as.CreateAccount(writer, reader)
+	if request.Method == "POST" {
+		return as.CreateAccount(writer, request)
 	}
-	//if reader.Method == "DELETE" {
-	//	return as.DeleteAccount(writer, reader)
+	//if request.Method == "DELETE" {
+	//	return as.DeleteAccount(writer, request)
 	//}
-	return fmt.Errorf("method not available: %s", reader.Method)
+	return fmt.Errorf("method not available: %s", request.Method)
 }
 
 // GetAccount gets all accounts.
-func (as *APIServer) GetAccount(writer http.ResponseWriter, reader *http.Request) error {
+func (as *APIServer) GetAccount(writer http.ResponseWriter, request *http.Request) error {
 	accounts, err := as.Store.GetAccounts()
 	if err != nil {
 		return err
@@ -49,9 +49,9 @@ func (as *APIServer) GetAccount(writer http.ResponseWriter, reader *http.Request
 }
 
 // GetAccountByID handles GET requests for retrieving account information with ID.
-func (as *APIServer) GetAccountByID(writer http.ResponseWriter, reader *http.Request) error {
-	if reader.Method == "GET" {
-		id, err := GetID(reader)
+func (as *APIServer) GetAccountByID(writer http.ResponseWriter, request *http.Request) error {
+	if request.Method == "GET" {
+		id, err := GetID(request)
 		if err != nil {
 			return err
 		}
@@ -62,14 +62,14 @@ func (as *APIServer) GetAccountByID(writer http.ResponseWriter, reader *http.Req
 		}
 		return WriteJSON(writer, http.StatusOK, account)
 	}
-	if reader.Method == "DELETE" {
-		return as.DeleteAccount(writer, reader)
+	if request.Method == "DELETE" {
+		return as.DeleteAccount(writer, request)
 	}
-	return fmt.Errorf("method not allowed %s: ", reader.Method)
+	return fmt.Errorf("method not allowed %s: ", request.Method)
 }
 
-func GetID(reader *http.Request) (int, error) {
-	idVariable := mux.Vars(reader)["id"]
+func GetID(request *http.Request) (int, error) {
+	idVariable := mux.Vars(request)["id"]
 	id, err := strconv.Atoi(idVariable)
 	if err != nil {
 		return id, fmt.Errorf("invalid ID given: %s ", idVariable)
@@ -78,9 +78,9 @@ func GetID(reader *http.Request) (int, error) {
 }
 
 // CreateAccount handles POST requests for creating new accounts.
-func (as *APIServer) CreateAccount(writer http.ResponseWriter, reader *http.Request) error {
+func (as *APIServer) CreateAccount(writer http.ResponseWriter, request *http.Request) error {
 	createAccountRequest := new(users.CreateCustomerRequest)
-	if err := json.NewDecoder(reader.Body).Decode(createAccountRequest); err != nil {
+	if err := json.NewDecoder(request.Body).Decode(createAccountRequest); err != nil {
 		return err
 	}
 	account := users.NewCustomer(
@@ -93,8 +93,8 @@ func (as *APIServer) CreateAccount(writer http.ResponseWriter, reader *http.Requ
 }
 
 // DeleteAccount handles DELETE requests for deleting existing accounts.
-func (as *APIServer) DeleteAccount(writer http.ResponseWriter, reader *http.Request) error {
-	id, err := GetID(reader)
+func (as *APIServer) DeleteAccount(writer http.ResponseWriter, request *http.Request) error {
+	id, err := GetID(request)
 	if err != nil {
 		return err
 	}
@@ -105,12 +105,12 @@ func (as *APIServer) DeleteAccount(writer http.ResponseWriter, reader *http.Requ
 }
 
 // Transfer handles transferring assets between accounts.
-func (as *APIServer) Transfer(writer http.ResponseWriter, reader *http.Request) error {
+func (as *APIServer) Transfer(writer http.ResponseWriter, request *http.Request) error {
 	transferRequest := new(users.TransferRequest)
-	if err := json.NewDecoder(reader.Body).Decode(transferRequest); err != nil {
+	if err := json.NewDecoder(request.Body).Decode(transferRequest); err != nil {
 		return err
 	}
-	defer reader.Body.Close()
+	defer request.Body.Close()
 	return WriteJSON(writer, http.StatusOK, transferRequest)
 }
 
