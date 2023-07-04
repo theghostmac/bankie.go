@@ -1,1 +1,3 @@
-GET localhost:8082/accounts
+GET localhost:8082/accounts/3
+
+#forbidden means you're not eligible to check ID's but you are admin
