@@ -47,7 +47,7 @@ func (us *UserRepository) createAccountTable() error {
 		last_name VARCHAR(50),
     	email VARCHAR(50),
 		bank_number VARCHAR(50),
-		balance NUMERIC,
+		balance FLOAT8,
 		created_at TIMESTAMP
 	)`
 	_, err := us.DB.Exec(query)
