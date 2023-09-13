@@ -114,15 +114,60 @@ func (as *APIServer) Transfer(writer http.ResponseWriter, request *http.Request)
 	return WriteJSON(writer, http.StatusOK, transferRequest)
 }
 
-// StartServer starts the API server.
+// BalanceInquiry handles GET requests for checking the balance of an account.
+func (as *APIServer) BalanceInquiry(writer http.ResponseWriter, request *http.Request) error {
+	if request.Method == "GET" {
+		id, err := GetID(request)
+		if err != nil {
+			return err
+		}
+
+		balance, err := as.Store.GetAccountBalance(id)
+		if err != nil {
+			return err
+		}
+		return WriteJSON(writer, http.StatusOK, map[string]float64{"balance": balance})
+	}
+
+	return fmt.Errorf("method not allowed: %s", request.Method)
+}
+
+// WithdrawMoney handles POST requests for withdrawing money from an account.
+func (as *APIServer) WithdrawMoney(writer http.ResponseWriter, request *http.Request) error {
+	if request.Method == "POST" {
+		withdrawRequest := new(users.WithdrawRequest)
+		if err := json.NewDecoder(request.Body).Decode(withdrawRequest); err != nil {
+			return err
+		}
+		defer request.Body.Close()
+
+		id, err := GetID(request)
+		if err != nil {
+			return err
+		}
+
+		if err := as.Store.WithdrawFromAccount(id, withdrawRequest.Amount); err != nil {
+			return err
+		}
+
+		return WriteJSON(writer, http.StatusOK, map[string]float64{"amount_withdrawn": withdrawRequest.Amount})
+	}
+
+	return fmt.Errorf("method not allowed: %s", request.Method)
+}
+
+// Add these new routes to the StartServer method:
 func (as *APIServer) StartServer() {
 	server := mux.NewRouter()
 	server.HandleFunc("/", HTTPHandleFunc(nil))
 	server.HandleFunc("/accounts", HTTPHandleFunc(as.HandleAccounts))
 	server.HandleFunc("/accounts/{id}", WithJWTAuth(HTTPHandleFunc(as.GetAccountByID)))
-
 	server.HandleFunc("/transfer/", HTTPHandleFunc(as.Transfer))
-	//log.Println("JSON API server running on port:", as.listenToPort)
+
+	// Add new routes for Balance Inquiry and Withdraw Money
+	server.HandleFunc("/accounts/{id}/balance", HTTPHandleFunc(as.BalanceInquiry))
+	server.HandleFunc("/accounts/{id}/withdraw", HTTPHandleFunc(as.WithdrawMoney))
+
 	logger.InfoLogs("JSON API server running on specified port...\n")
 	http.ListenAndServe(as.ListenToPort, server)
 }

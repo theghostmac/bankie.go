@@ -8,7 +8,7 @@ import (
 // custom types.
 type (
 	AName string
-	//Money  float64
+	// Money  float64
 	BankID int64
 )
 
@@ -26,6 +26,10 @@ const (
 // PaymentDetails records the payment details from the external api for funding bankie wallet.
 type PaymentDetails struct {
 	APISourceTokenID string
+}
+
+type WithdrawRequest struct {
+	Amount float64 `json:"amount"`
 }
 
 // UserAddRequest makes any TypeOfUser to become a Customer.

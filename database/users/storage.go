@@ -3,8 +3,6 @@ package users
 import (
 	"database/sql"
 	"fmt"
-
-	_ "github.com/lib/pq"
 )
 
 type Storage interface {
@@ -14,6 +12,8 @@ type Storage interface {
 	GetAccountByID(int) (Account *CustomerAccount, err error)
 	GetAccounts() ([]*CustomerAccount, error)
 	GetAccountByEmail(string) (Account *CustomerAccount)
+	WithdrawFromAccount(accountID int, amount float64) error
+	GetAccountBalance(id int) (float64, error)
 }
 
 type UserRepository struct {
@@ -119,4 +119,20 @@ func (us *UserRepository) UpdateAccount(*CustomerAccount) error {
 func (us *UserRepository) DeleteAccount(id int) error {
 	_, err := us.DB.Query("DELETE FROM account WHERE id = $1")
 	return err
+}
+
+func (us *UserRepository) WithdrawFromAccount(accountID int, amount float64) error {
+	query := "UPDATE account SET balance = balance - $1 WHERE id = $2"
+	_, err := us.DB.Exec(query, amount, accountID)
+	return err
+}
+
+func (us *UserRepository) GetAccountBalance(id int) (float64, error) {
+    query := "SELECT balance FROM account WHERE id = $1"
+    var balance float64
+    err := us.DB.QueryRow(query, id).Scan(&balance)
+    if err != nil {
+        return 0, err
+    }
+    return balance, nil
 }
