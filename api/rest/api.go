@@ -15,6 +15,7 @@ func WriteJSON(writer http.ResponseWriter, status int, value interface{}) error 
 	writer.Header().Add("Content-Type", "application/json")
 	writer.WriteHeader(status)
 	return json.NewEncoder(writer).Encode(value)
+
 }
 
 // NewAPIServer creates a new APIServer instance listening on the provided port.
@@ -33,9 +34,9 @@ func (as *APIServer) HandleAccounts(writer http.ResponseWriter, request *http.Re
 	if request.Method == "POST" {
 		return as.CreateAccount(writer, request)
 	}
-	//if request.Method == "DELETE" {
-	//	return as.DeleteAccount(writer, request)
-	//}
+	if request.Method == "DELETE" {
+		return as.DeleteAccount(writer, request)
+	}
 	return fmt.Errorf("method not available: %s", request.Method)
 }
 
