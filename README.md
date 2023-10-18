@@ -13,8 +13,6 @@ Bankie.go is a simple banking application built with Go programming language. It
 
 Bankie.go can be installed using one of the following methods:
 
-<tabs>
-<tab title="Makefile">
 ### Installation with Makefile
 
 To run Bankie.go using the Makefile, make sure you have Go and Make installed on your system. Then, follow these steps:
@@ -36,8 +34,7 @@ To run Bankie.go using the Makefile, make sure you have Go and Make installed on
    ```shell
    make run
    ```
-</tab>
-<tab title="Docker">
+
 ### Installation with Docker
 
 To run Bankie.go using Docker, make sure you have Docker installed on your system. Then, follow these steps:
@@ -59,9 +56,6 @@ To run Bankie.go using Docker, make sure you have Docker installed on your syste
    docker run -p 8080:8080 bankie
    ```
 
-</tab>
-<tab title="Cloning the Repository">
-
 ### Installation by Cloning the Repository
 
 To run Bankie.go by cloning the repository, make sure you have Go installed on your system. Then, follow these steps:
@@ -82,9 +76,6 @@ To run Bankie.go by cloning the repository, make sure you have Go installed on y
    ```shell
    ./bankie.go
    ```
-
-</tab>
-</tabs>
 
 ## Usage
 
