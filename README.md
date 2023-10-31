@@ -29,6 +29,10 @@ To run Bankie.go using Docker Compose, make sure you have Docker and Docker Comp
 
    ```shell
    docker-compose up
+   ``` 
+   or:
+   ```shell
+   make docker
    ```
 
 This will start the application and its dependencies, including PostgreSQL, using Docker Compose.

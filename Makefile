@@ -1,4 +1,4 @@
-.PHONY: all build run test clean
+.PHONY: all build test clean docker
 
 BINARY_NAME := bankie
 DOCKER_IMAGE_NAME := bankie
@@ -20,11 +20,10 @@ clean:
 	@echo "Cleaning up..."
 	@rm -f $(BINARY_NAME)
 
-docker-build:
-	@echo "Building Docker image..."
-	@docker build -t $(DOCKER_IMAGE_NAME) .
+docker:
+	@echo "Starting Docker Compose..."
+	@docker-compose up
 
-docker-run:
-	@echo "Running Docker container..."
-	@docker run --rm $(DOCKER_IMAGE_NAME)
-
+docker-down:
+	@echo "Stopping Docker Compose..."
+	@docker-compose down
