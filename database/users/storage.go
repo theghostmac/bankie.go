@@ -21,7 +21,7 @@ type UserRepository struct {
 }
 
 func NewUserRepository() (*UserRepository, error) {
-	connStr := "host=localhost port=5432 user=postgres dbname=bankiestore password=ph03n1x sslmode=disable"
+	connStr := "host=bankie-postgres port=5432 user=postgres dbname=bankiestore password=ph03n1x sslmode=disable"
 	DB, err := sql.Open("postgres", connStr)
 	if err != nil {
 		return nil, err
@@ -128,11 +128,11 @@ func (us *UserRepository) WithdrawFromAccount(accountID int, amount float64) err
 }
 
 func (us *UserRepository) GetAccountBalance(id int) (float64, error) {
-    query := "SELECT balance FROM account WHERE id = $1"
-    var balance float64
-    err := us.DB.QueryRow(query, id).Scan(&balance)
-    if err != nil {
-        return 0, err
-    }
-    return balance, nil
+	query := "SELECT balance FROM account WHERE id = $1"
+	var balance float64
+	err := us.DB.QueryRow(query, id).Scan(&balance)
+	if err != nil {
+		return 0, err
+	}
+	return balance, nil
 }

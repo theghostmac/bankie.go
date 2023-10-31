@@ -158,6 +158,7 @@ func (as *APIServer) WithdrawMoney(writer http.ResponseWriter, request *http.Req
 }
 
 // Add these new routes to the StartServer method:
+
 func (as *APIServer) StartServer() {
 	server := mux.NewRouter()
 	server.HandleFunc("/", HTTPHandleFunc(nil))

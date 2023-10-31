@@ -1,0 +1,40 @@
+version: "3.8"
+
+services:
+    postgres:
+        image: postgres:latest
+        container_name: bankie-postgres
+        environment:
+            POSTGRES_DB: bankiestore
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: ph03n1x
+        ports:
+            - "5432:5432"
+        networks:
+            - bankie-network
+#         volumes:
+#             - database_postgres:/var/lib/postgresql/data
+
+    bankie:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        container_name: bankie-app
+        ports:
+            -   "8082:8082"
+        depends_on:
+            - postgres
+        environment:
+            DB_HOST: postgres
+            DB_PORT: 5432
+            DB_USER: postgres
+            DB_PASSWORD: ph03n1x
+            DB_NAME: bankiestore
+        networks:
+            - bankie-network
+#
+# volumes:
+#     database_postgres:
+
+networks:
+    bankie-network:

@@ -14,15 +14,7 @@ RUN go mod download
 COPY . .
 
 # Build Bankie
-RUN go build -o bankie cmd/app/
-
-# Use a lightweight Alpine base image
-FROM alpine:latest
-
-# Set the workdir instide the container
-
-# Expose the port the application will listen to. Close after configuring config.InitiateConfig().
-EXPOSE 8082
+RUN go build -o /app/bankie ./cmd/app
 
 # Set the entrypoint to run Bankie
-ENTRYPOINT ["/bankie"]
+CMD ["/app/bankie"]
