@@ -9,80 +9,60 @@ Bankie.go is a simple banking application built with Go programming language. It
 - **Fund Transfers**: Users can transfer funds from one account to another.
 - **Transaction History**: The application maintains a transaction history for each account, allowing users to track their transactions.
 
-## Installation
+## Setup with Docker Compose
 
-Bankie.go can be installed using one of the following methods:
-
-### Installation with Makefile
-
-To run Bankie.go using the Makefile, make sure you have Go and Make installed on your system. Then, follow these steps:
+To run Bankie.go using Docker Compose, make sure you have Docker and Docker Compose installed on your system. Then, follow these steps:
 
 1. Clone the repository:
+
    ```shell
    git clone https://github.com/theghostmac/bankie.go.git
    ```
+
 2. Navigate to the project directory:
+
    ```shell
    cd bankie.go
    ```
-3. Start the PostgreSQL repository by running the Docker installation below, in another terminal.
-   To start bankie any time, run:
+
+3. Start the application using Docker Compose:
+
    ```shell
-   docker start bankie
-   ```
-4. Build and run the application using the Makefile:
-   ```shell
-   make run
+   docker-compose up
    ```
 
-### Installation with Docker
+This will start the application and its dependencies, including PostgreSQL, using Docker Compose.
 
-To run Bankie.go using Docker, make sure you have Docker installed on your system. Then, follow these steps:
+## Example Usage with cURL
 
-1. Clone the repository:
-   ```shell
-   git clone https://github.com/theghostmac/bankie.go.git
-   ```
-2. Navigate to the project directory:
-   ```shell
-   cd bankie.go
-   ```
-3. Build the Docker image:
-   ```shell
-   docker build -t bankie .
-   ```
-4. Run the Docker container:
-   ```shell
-   docker run -p 8080:8080 bankie
-   ```
+Once the application is running, you can interact with it using a RESTful API. Here are some example cURL commands:
 
-### Installation by Cloning the Repository
+### Create a new bank account:
 
-To run Bankie.go by cloning the repository, make sure you have Go installed on your system. Then, follow these steps:
+```shell
+curl -X POST -H "Content-Type: application/json" -d '{
+    "FirstName": "John",
+    "LastName": "Doe",
+    "Email": "johndoe@example.com"
+}' http://localhost:8082/accounts
+```
 
-1. Clone the repository:
-   ```shell
-   git clone https://github.com/theghostmac/bankie.go.git
-   ```
-2. Navigate to the project directory:
-   ```shell
-   cd bankie.go
-   ```
-3. Build the application:
-   ```shell
-   go build
-   ```
-4. Run the application:
-   ```shell
-   ./bankie.go
-   ```
+Output:
 
-## Usage
+```json
+{"firstName":"John","lastName":"Doe","email":"johndoe@example.com"}
+```
 
-Once the application is running, you can interact with it using a RESTFul API. The following endpoints are available:
+### Retrieve information about a specific account:
 
-- **POST /accounts**: Create a new bank account. Provide the account holder's name and an initial deposit amount.
-- **GET /accounts/:id**: Retrieve information about a specific account.
+Replace `:id` with the actual account ID:
+
+```shell
+curl http://localhost:8082/accounts/:id
+```
+
+### Other Endpoints:
+
 - **POST /accounts/:id/deposit**: Make a deposit to a specific account. Provide the deposit amount.
 - **POST /accounts/:id/withdraw**: Make a withdrawal from a specific account. Provide the withdrawal amount.
 - **POST /accounts/:id/transfer**: Transfer funds from one account to another. Provide the recipient account ID and the transfer amount.
